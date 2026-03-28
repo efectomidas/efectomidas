@@ -96,6 +96,8 @@
   .service-item:hover { background: var(--dark-3); }
   .service-name { font-family: var(--serif); font-size: 1.15rem; font-weight: 400; color: var(--cream); margin-bottom: 0.3rem; }
   .service-tag { display: inline-block; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-dim); border: 1px solid rgba(201,168,76,0.18); padding: 0.15rem 0.5rem; border-radius: 1px; }
+  .service-list { margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.25rem 0.6rem; }
+  .service-list span { font-size: 0.72rem; color: var(--text-muted); }
 
   /* PROCESO */
   #proceso { background: var(--dark-2); padding: 4rem 1.5rem; }
@@ -248,18 +250,24 @@
 
 <section id="servicios">
   <p class="section-label">Lo que enchapamos</p>
-  <h2 class="section-title">Oro real,<br><em>acabado eterno.</em></h2>
+  <h2 class="section-title">Oro real<br><em>de 24K.</em></h2>
   <div class="services-grid">
     <div class="service-item">
       <p class="service-name">Joyería y accesorios</p>
       <span class="service-tag">Más solicitado</span>
+      <div class="service-list">
+        <span>Anillos</span><span>Relojes</span><span>Cadenas</span><span>Pulseras</span><span>Aretes</span><span>Broches</span>
+      </div>
     </div>
     <div class="service-item">
       <p class="service-name">Objetos del hogar</p>
       <span class="service-tag">Decoración</span>
+      <div class="service-list">
+        <span>Grifería</span><span>Cubiertos</span><span>Marcos</span><span>Candelabros</span><span>Manijas</span>
+      </div>
     </div>
     <div class="service-item">
-      <p class="service-name">Trofeos y reconocimientos</p>
+      <p class="service-name">Trofeos y coleccionables</p>
       <span class="service-tag">Empresas</span>
     </div>
     <div class="service-item">
