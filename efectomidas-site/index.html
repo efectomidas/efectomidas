@@ -10,17 +10,43 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --gold: #C9A84C; --gold-light: #E8C96A; --gold-dim: #8B6914; --dark: #0A0804; --dark-2: #110E06; --dark-3: #1A150A; --dark-4: #231C0D; --cream: #F5EDD8; --cream-dim: #C4B48A; --text-muted: #7A6A45; --serif: 'Cormorant Garamond', Georgia, serif; --sans: 'DM Sans', sans-serif; }
+  :root {
+    --gold: #C9A84C; --gold-light: #E8C96A; --gold-dim: #8B6914;
+    --dark: #0A0804; --dark-2: #110E06; --dark-3: #1A150A; --dark-4: #231C0D;
+    --cream: #F5EDD8; --cream-dim: #C4B48A; --text-muted: #7A6A45;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'DM Sans', sans-serif;
+  }
   html { scroll-behavior: smooth; }
   body { background: var(--dark); color: var(--cream); font-family: var(--sans); font-weight: 300; line-height: 1.7; overflow-x: hidden; }
-  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, rgba(10,8,4,0.9), transparent); }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center;
+    background: linear-gradient(to bottom, rgba(10,8,4,0.9), transparent);
+  }
   .logo { font-family: var(--serif); font-size: 1.4rem; font-weight: 300; color: var(--gold); letter-spacing: 0.05em; text-decoration: none; }
   .logo span { font-style: italic; }
-  .nav-cta { background: var(--gold); color: var(--dark); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.55rem 1.1rem; border-radius: 2px; text-decoration: none; transition: background 0.2s; }
+  .nav-cta {
+    background: var(--gold); color: var(--dark); font-size: 0.75rem; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase; padding: 0.55rem 1.1rem;
+    border-radius: 2px; text-decoration: none; transition: background 0.2s;
+  }
   .nav-cta:hover { background: var(--gold-light); }
+
+  /* HERO */
   .hero { position: relative; height: 100svh; overflow: hidden; display: flex; align-items: flex-end; }
-  .hero-img { position: absolute; inset: 0; background: url('img/auto.jpg') center center / cover no-repeat; }
-  .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,8,4,0.92) 0%, rgba(10,8,4,0.3) 50%, rgba(10,8,4,0.15) 100%); }
+  .hero-img {
+    position: absolute; inset: 0; overflow: hidden;
+  }
+  .hero-img video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,8,4,0.92) 0%, rgba(10,8,4,0.3) 50%, rgba(10,8,4,0.15) 100%);
+  }
   .hero-content { position: relative; z-index: 2; padding: 0 1.5rem 3.5rem; width: 100%; }
   .hero-label { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; display: block; }
   .hero-title { font-family: var(--serif); font-size: clamp(2.8rem, 12vw, 5rem); font-weight: 300; line-height: 1.05; color: var(--cream); margin-bottom: 2rem; }
@@ -34,6 +60,8 @@
   .hero-scroll span { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; }
   .scroll-line { width: 1px; height: 36px; background: linear-gradient(to bottom, var(--gold), transparent); animation: scrollpulse 2s ease-in-out infinite; }
   @keyframes scrollpulse { 0%,100%{opacity:.35;transform:scaleY(1)} 50%{opacity:.8;transform:scaleY(1.2)} }
+
+  /* GALERÍA */
   #galeria { background: var(--dark-2); padding: 3rem 0; }
   .gallery-header { padding: 0 1.5rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: baseline; }
   .gallery-title { font-family: var(--serif); font-size: clamp(1.6rem, 5vw, 2.2rem); font-weight: 300; color: var(--cream); }
@@ -44,6 +72,8 @@
   .gallery-item.wide { grid-column: span 2; aspect-ratio: 16/7; }
   .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s ease; }
   .gallery-item:hover img { transform: scale(1.04); }
+
+  /* CITAS */
   #citas { background: var(--dark-3); padding: 5rem 1.5rem; text-align: center; }
   .section-label { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.6rem; }
   .section-title { font-family: var(--serif); font-size: clamp(1.8rem, 6vw, 2.8rem); font-weight: 300; line-height: 1.15; color: var(--cream); margin-bottom: 2.5rem; }
@@ -58,12 +88,16 @@
   .btn-calendly-ghost:hover { border-color: var(--gold); color: var(--gold-light); }
   .citas-wa { font-size: 0.8rem; color: var(--text-muted); margin-top: 1.25rem; }
   .citas-wa a { color: #25D366; text-decoration: none; }
+
+  /* SERVICIOS */
   #servicios { background: var(--dark); padding: 4rem 1.5rem; }
   .services-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; border: 1px solid rgba(201,168,76,0.12); }
   .service-item { padding: 1.5rem 1.25rem; background: var(--dark-2); border-bottom: 1px solid rgba(201,168,76,0.08); transition: background 0.3s; }
   .service-item:hover { background: var(--dark-3); }
   .service-name { font-family: var(--serif); font-size: 1.15rem; font-weight: 400; color: var(--cream); margin-bottom: 0.3rem; }
   .service-tag { display: inline-block; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-dim); border: 1px solid rgba(201,168,76,0.18); padding: 0.15rem 0.5rem; border-radius: 1px; }
+
+  /* PROCESO */
   #proceso { background: var(--dark-2); padding: 4rem 1.5rem; }
   .steps { margin-top: 2rem; display: flex; flex-direction: column; gap: 0; }
   .step { display: flex; gap: 1.25rem; padding: 1.4rem 0; border-bottom: 1px solid rgba(201,168,76,0.08); align-items: flex-start; }
@@ -71,31 +105,58 @@
   .step-num { font-family: var(--serif); font-size: 2rem; font-weight: 300; color: rgba(201,168,76,0.18); line-height: 1; min-width: 2rem; text-align: right; }
   .step-title { font-family: var(--serif); font-size: 1.1rem; color: var(--cream); margin-bottom: 0.2rem; }
   .step-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.75; }
+
+  /* CONTACTO */
   #contacto { background: var(--dark); padding: 4rem 1.5rem; }
   .contact-grid { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
   .contact-item { display: flex; gap: 1rem; align-items: center; padding: 1.1rem 1.25rem; border: 1px solid rgba(201,168,76,0.1); background: var(--dark-2); text-decoration: none; transition: border-color 0.2s; }
   .contact-item:hover { border-color: rgba(201,168,76,0.35); }
   .contact-label { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dim); display: block; margin-bottom: 0.15rem; }
   .contact-value { font-family: var(--serif); font-size: 1rem; color: var(--cream); }
+
+  /* FOOTER */
   footer { background: var(--dark-2); padding: 2.5rem 1.5rem; text-align: center; border-top: 1px solid rgba(201,168,76,0.08); }
   .footer-logo { font-family: var(--serif); font-size: 1.5rem; font-weight: 300; color: var(--gold); font-style: italic; margin-bottom: 0.75rem; }
   .footer-links { display: flex; justify-content: center; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
   .footer-links a { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
   .footer-links a:hover { color: var(--gold); }
   .footer-copy { font-size: 0.68rem; color: rgba(122,106,69,0.45); }
+
+  /* WhatsApp flotante */
   .wa-float { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 99; background: #25D366; width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(37,211,102,0.35); text-decoration: none; transition: transform 0.2s; }
   .wa-float:hover { transform: scale(1.08); }
-  @media (min-width: 640px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); } .gallery-item.wide { grid-column: span 3; } .services-grid { grid-template-columns: repeat(3, 1fr); } }
-  @media (min-width: 960px) { nav { padding: 1.2rem 3rem; } .hero-content { padding: 0 3rem 4rem; } .gallery-header { padding: 0 3rem; } #servicios, #citas, #proceso, #contacto { padding-left: 3rem; padding-right: 3rem; } .gallery-grid { grid-template-columns: repeat(4, 1fr); } .gallery-item.wide { grid-column: span 4; aspect-ratio: 16/6; } }
+
+  /* RESPONSIVE */
+  @media (min-width: 640px) {
+    .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+    .gallery-item.wide { grid-column: span 3; }
+    .services-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (min-width: 960px) {
+    nav { padding: 1.2rem 3rem; }
+    .hero-content { padding: 0 3rem 4rem; }
+    #galeria { padding: 3rem 0; }
+    .gallery-header { padding: 0 3rem; }
+    #servicios, #citas, #proceso, #contacto { padding-left: 3rem; padding-right: 3rem; }
+    .gallery-grid { grid-template-columns: repeat(4, 1fr); }
+    .gallery-item.wide { grid-column: span 4; aspect-ratio: 16/6; }
+    .services-grid { grid-template-columns: repeat(3, 1fr); }
+  }
 </style>
 </head>
 <body>
+
 <nav>
   <a href="#" class="logo"><span>Efecto</span>Midas</a>
   <a href="https://calendly.com/infoefectomidas/consulta-inicial" target="_blank" class="nav-cta">Agendar cita</a>
 </nav>
+
 <section class="hero" id="inicio">
-  <div class="hero-img"></div>
+  <div class="hero-img">
+    <video autoplay muted loop playsinline preload="auto">
+      <source src="efectomidas%20hero%20top%20banner.MP4" type="video/mp4">
+    </video>
+  </div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <span class="hero-label">Cochabamba · Bolivia · Más de una década de experiencia</span>
@@ -105,32 +166,69 @@
       <a href="#galeria" class="btn-ghost">Ver trabajos</a>
     </div>
   </div>
-  <div class="hero-scroll"><div class="scroll-line"></div><span>Explorar</span></div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Explorar</span>
+  </div>
 </section>
+
 <section id="galeria">
   <div class="gallery-header">
     <h2 class="gallery-title">El oro<br><em>habla solo.</em></h2>
     <span class="gallery-label">Trabajos reales</span>
   </div>
   <div class="gallery-grid">
-    <div class="gallery-item wide"><img src="img/harley.jpg" alt="Motor Harley Davidson enchapado en oro — EfectoMidas" loading="eager"></div>
-    <div class="gallery-item"><img src="img/rollsroyce.jpg" alt="Ornamento Rolls Royce enchapado en oro" loading="lazy"></div>
-    <div class="gallery-item"><img src="img/pulsera.jpg" alt="Pulsera enchapada en oro 24K" loading="lazy"></div>
-    <div class="gallery-item"><img src="img/vertu.jpg" alt="Teléfono Vertu enchapado en oro" loading="lazy"></div>
-    <div class="gallery-item"><img src="img/lavabo.jpg" alt="Lavabo enchapado en oro" loading="lazy"></div>
-    <div class="gallery-item"><img src="img/cubiertos.jpg" alt="Cubiertos enchapados en oro" loading="lazy"></div>
-    <div class="gallery-item"><img src="img/griferia.gif" alt="Grifería enchapada en oro" loading="lazy"></div>
-    <div class="gallery-item"><img src="img/P1270008.JPG" alt="Trabajo EfectoMidas" loading="lazy"></div>
-    <div class="gallery-item"><img src="img/P8150011%20a.jpg" alt="Trabajo EfectoMidas" loading="lazy"></div>
-    <div class="gallery-item"><img src="img/P8210021z.JPG" alt="Trabajo EfectoMidas" loading="lazy"></div>
-    <div class="gallery-item"><img src="img/P8240011a.jpg" alt="Trabajo EfectoMidas" loading="lazy"></div>
-    <div class="gallery-item"><img src="img/P8250002.JPG" alt="Trabajo EfectoMidas" loading="lazy"></div>
-    <div class="gallery-item"><img src="img/P8250009.JPG" alt="Trabajo EfectoMidas" loading="lazy"></div>
-    <div class="gallery-item"><img src="img/P8300027.JPG" alt="Trabajo EfectoMidas" loading="lazy"></div>
-    <div class="gallery-item"><img src="img/P9200016.JPG" alt="Trabajo EfectoMidas" loading="lazy"></div>
-    <div class="gallery-item"><img src="img/IMG_2159.jpg" alt="Trabajo EfectoMidas" loading="lazy"></div>
+    <div class="gallery-item wide">
+      <img src="img/harley.jpg" alt="Motor Harley Davidson enchapado en oro — EfectoMidas" loading="eager">
+    </div>
+    <div class="gallery-item">
+      <img src="img/rollsroyce.jpg" alt="Ornamento Rolls Royce enchapado en oro" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="img/pulsera.jpg" alt="Pulsera enchapada en oro 24K" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="img/vertu.jpg" alt="Teléfono Vertu enchapado en oro" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="img/lavabo.jpg" alt="Lavabo enchapado en oro" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="img/cubiertos.jpg" alt="Cubiertos enchapados en oro" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="img/griferia.gif" alt="Grifería enchapada en oro" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="img/P1270008.JPG" alt="Trabajo de electroplatinado — EfectoMidas" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="img/P8150011%20a.jpg" alt="Trabajo de electroplatinado — EfectoMidas" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="img/P8210021z.JPG" alt="Trabajo de electroplatinado — EfectoMidas" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="img/P8240011a.jpg" alt="Trabajo de electroplatinado — EfectoMidas" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="img/P8250002.JPG" alt="Trabajo de electroplatinado — EfectoMidas" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="img/P8250009.JPG" alt="Trabajo de electroplatinado — EfectoMidas" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="img/P8300027.JPG" alt="Trabajo de electroplatinado — EfectoMidas" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="img/P9200016.JPG" alt="Trabajo de electroplatinado — EfectoMidas" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="img/IMG_2159.jpg" alt="Trabajo de electroplatinado — EfectoMidas" loading="lazy">
+    </div>
   </div>
 </section>
+
 <section id="citas">
   <p class="section-label" style="text-align:center;">Reserva tu lugar</p>
   <h2 class="citas-title">Hablemos de<br><em>tu proyecto.</em></h2>
@@ -147,28 +245,73 @@
   </div>
   <p class="citas-wa">¿Prefieres WhatsApp? <a href="https://wa.me/59172734273" target="_blank">Escríbeme ahora →</a></p>
 </section>
+
 <section id="servicios">
   <p class="section-label">Lo que enchapamos</p>
   <h2 class="section-title">Oro real,<br><em>acabado eterno.</em></h2>
   <div class="services-grid">
-    <div class="service-item"><p class="service-name">Joyería y accesorios</p><span class="service-tag">Más solicitado</span></div>
-    <div class="service-item"><p class="service-name">Objetos del hogar</p><span class="service-tag">Decoración</span></div>
-    <div class="service-item"><p class="service-name">Trofeos y reconocimientos</p><span class="service-tag">Empresas</span></div>
-    <div class="service-item"><p class="service-name">Recuerdos personales</p><span class="service-tag">Regalos únicos</span></div>
-    <div class="service-item"><p class="service-name">Autopartes y electrónica</p><span class="service-tag">Industrial</span></div>
-    <div class="service-item"><p class="service-name">Moda y accesorios</p><span class="service-tag">Moda y estilo</span></div>
+    <div class="service-item">
+      <p class="service-name">Joyería y accesorios</p>
+      <span class="service-tag">Más solicitado</span>
+    </div>
+    <div class="service-item">
+      <p class="service-name">Objetos del hogar</p>
+      <span class="service-tag">Decoración</span>
+    </div>
+    <div class="service-item">
+      <p class="service-name">Trofeos y reconocimientos</p>
+      <span class="service-tag">Empresas</span>
+    </div>
+    <div class="service-item">
+      <p class="service-name">Recuerdos personales</p>
+      <span class="service-tag">Regalos únicos</span>
+    </div>
+    <div class="service-item">
+      <p class="service-name">Autopartes y electrónica</p>
+      <span class="service-tag">Industrial</span>
+    </div>
+    <div class="service-item">
+      <p class="service-name">Moda y accesorios</p>
+      <span class="service-tag">Moda y estilo</span>
+    </div>
   </div>
 </section>
+
 <section id="proceso">
   <p class="section-label">Cómo funciona</p>
   <h2 class="section-title"><em>Simple,</em><br>rápido, brillante.</h2>
   <div class="steps">
-    <div class="step"><div class="step-num">01</div><div><p class="step-title">Agenda tu cita</p><p class="step-desc">En línea, WhatsApp o llamada. En persona en Cochabamba o a domicilio previo acuerdo.</p></div></div>
-    <div class="step"><div class="step-num">02</div><div><p class="step-title">Evaluamos tu objeto</p><p class="step-desc">Revisamos material, tamaño y acabado. Precio exacto, sin sorpresas.</p></div></div>
-    <div class="step"><div class="step-num">03</div><div><p class="step-title">Enchape en oro 24K</p><p class="step-desc">Limpieza, preparación y enchape con química de precisión. Un solo maestro, de principio a fin.</p></div></div>
-    <div class="step"><div class="step-num">04</div><div><p class="step-title">Recibes tu pieza</p><p class="step-desc">Entrega en taller en Cochabamba. Tu objeto transformado, tu satisfacción garantizada.</p></div></div>
+    <div class="step">
+      <div class="step-num">01</div>
+      <div>
+        <p class="step-title">Agenda tu cita</p>
+        <p class="step-desc">En línea, WhatsApp o llamada. En persona en Cochabamba o a domicilio previo acuerdo.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div>
+        <p class="step-title">Evaluamos tu objeto</p>
+        <p class="step-desc">Revisamos material, tamaño y acabado. Precio exacto, sin sorpresas.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div>
+        <p class="step-title">Enchape en oro 24K</p>
+        <p class="step-desc">Limpieza, preparación y enchape con química de precisión. Un solo maestro, de principio a fin.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div>
+        <p class="step-title">Recibes tu pieza</p>
+        <p class="step-desc">Entrega en taller en Cochabamba. Tu objeto transformado, tu satisfacción garantizada.</p>
+      </div>
+    </div>
   </div>
 </section>
+
 <section id="contacto">
   <p class="section-label">Encuéntrame</p>
   <h2 class="section-title">Estamos en<br><em>Cochabamba.</em></h2>
@@ -188,15 +331,22 @@
     </div>
   </div>
 </section>
+
 <footer>
   <div class="footer-logo">EfectoMidas</div>
   <div class="footer-links">
-    <a href="#galeria">Galería</a><a href="#citas">Citas</a><a href="#servicios">Servicios</a><a href="#proceso">Proceso</a><a href="#contacto">Contacto</a>
+    <a href="#galeria">Galería</a>
+    <a href="#citas">Citas</a>
+    <a href="#servicios">Servicios</a>
+    <a href="#proceso">Proceso</a>
+    <a href="#contacto">Contacto</a>
   </div>
   <p class="footer-copy">© 2026 EfectoMidas · Enchape en oro · Cochabamba, Bolivia</p>
 </footer>
+
 <a href="https://wa.me/59172734273" target="_blank" class="wa-float" title="WhatsApp">
   <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M13 2C7.5 2 3 6.5 3 12c0 1.9.5 3.7 1.4 5.2L3 23l6-1.4C10.3 22.5 11.6 23 13 23c5.5 0 10-4.5 10-10S18.5 2 13 2z" fill="white"/><path d="M9.5 10.5c.4.9 1 1.9 1.9 2.8.9.9 1.9 1.5 2.8 1.9l1-1.2c.3-.3.7-.4 1-.1l2.5 1.3c.4.2.5.6.3 1C18.4 17.3 17.1 18 16 18c-2.8 0-6.8-4-6.8-6.8 0-1.1.7-2.4 1.8-3 .4-.2.8-.1 1 .3l1.3 2.5c.2.3.1.7-.1 1l-1.2 1z" fill="#25D366"/></svg>
 </a>
+
 </body>
 </html>
