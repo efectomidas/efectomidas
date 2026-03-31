@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="EfectoMidas">
+<meta name="theme-color" content="#0a0a0a">
+<title>EfectoMidas — Calculadora 24K</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8C97A;
+  --gold-dim: #8B6E2E;
+  --bg: #0a0a0a;
+  --bg2: #111111;
+  --bg3: #181818;
+  --border: rgba(201,168,76,0.18);
+  --border-strong: rgba(201,168,76,0.35);
+  --text: #F0EDE6;
+  --text-muted: #7A756A;
+  --text-dim: #4A4640;
+  --red: #C0392B;
+  --green: #1D9E75;
+  --font-serif: 'Cormorant Garamond', serif;
+  --font-mono: 'DM Mono', monospace;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-top: env(safe-area-inset-top, 0px);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html { background: var(--bg); }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  min-height: 100dvh;
+  padding-top: var(--safe-top);
+  padding-bottom: calc(var(--safe-bottom) + 60px);
+  overflow-x: hidden;
+}
+
+/* HEADER */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,10,10,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 0.5px solid var(--border);
+  padding: 14px 20px 12px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.header-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.brand-name {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  color: var(--gold-light);
+  line-height: 1;
+}
+
+.brand-sub {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* MODE TOGGLE */
+.mode-toggle {
+  display: flex;
+  background: var(--bg3);
+  border: 0.5px solid var(--border);
+  border-radius: 20px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.mode-btn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  padding: 5px 12px;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: none;
+  color: var(--text-muted);
+}
+
+.mode-btn.active {
+  background: var(--gold);
+  color: #000;
+  font-weight: 500;
+}
+
+/* PANELS */
+.panel { display: none; padding: 0 0 20px; }
+.panel.active { display: block; }
+
+/* SECTION */
+.section {
+  margin: 16px 16px 0;
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.section-header {
+  padding: 10px 16px;
+  border-bottom: 0.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-label {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.section-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--gold-dim);
+  flex-shrink: 0;
+}
+
+/* FIELD ROW */
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 0.5px solid rgba(201,168,76,0.07);
+  gap: 12px;
+}
+.field:last-child { border-bottom: none; }
+
+.field-left { flex: 1; min-width: 0; }
+.field-name {
+  font-size: 12px;
+  color: var(--text);
+  font-weight: 400;
+  line-height: 1.3;
+}
+.field-hint {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.field-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+
+/* INPUTS */
+input[type=number] {
+  background: var(--bg3);
+  border: 0.5px solid var(--border-strong);
+  border-radius: 6px;
+  color: var(--gold-light);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 7px 10px;
+  width: 90px;
+  text-align: right;
+  -moz-appearance: textfield;
+  outline: none;
+  transition: border-color 0.15s;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+input[type=number]:focus { border-color: var(--gold); }
+
+select {
+  background: var(--bg3);
+  border: 0.5px solid var(--border-strong);
+  border-radius: 6px;
+  color: var(--gold-light);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 7px 8px;
+  outline: none;
+  max-width: 140px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23C9A84C'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 24px;
+}
+
+.unit {
+  font-size: 10px;
+  color: var(--text-dim);
+  min-width: 24px;
+}
+
+/* RESULTS GRID */
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 16px 16px 0;
+}
+
+.result-card {
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 14px 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.result-card.span2 {
+  grid-column: 1 / -1;
+}
+
+.result-card.main-result {
+  border-color: var(--gold-dim);
+  background: linear-gradient(135deg, #111 0%, #161208 100%);
+}
+
+.result-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.result-card.main-result::before { opacity: 1; }
+
+.rc-label {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+
+.rc-value {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 300;
+  color: var(--gold-light);
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.rc-value.big {
+  font-size: 36px;
+}
+
+.rc-sub {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+/* BREAKDOWN TABLE */
+.breakdown {
+  margin: 16px 16px 0;
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.brow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 0.5px solid rgba(201,168,76,0.07);
+}
+.brow:last-child { border-bottom: none; }
+.brow.total-row {
+  background: rgba(201,168,76,0.05);
+  border-top: 0.5px solid var(--border);
+}
+
+.brow-name { color: var(--text-muted); font-size: 11px; }
+.brow-val { color: var(--text); font-size: 13px; font-weight: 500; font-family: var(--font-mono); }
+.brow.total-row .brow-name { color: var(--text); font-size: 12px; }
+.brow.total-row .brow-val { color: var(--gold-light); font-size: 15px; }
+
+/* CLIENT PRICE SECTION */
+.price-band {
+  margin: 16px 16px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 0.5px solid var(--border);
+}
+
+.price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: var(--bg2);
+  border-bottom: 0.5px solid var(--border);
+  gap: 12px;
+}
+.price-row:last-child { border-bottom: none; }
+.price-row.recommended {
+  background: linear-gradient(135deg, #111 0%, #0e0d08 100%);
+  border-left: 2px solid var(--gold);
+}
+
+.pr-label { font-size: 10px; color: var(--text-muted); margin-bottom: 2px; }
+.pr-tag {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 0.5px solid var(--gold-dim);
+  color: var(--gold-dim);
+  display: inline-block;
+  margin-bottom: 4px;
+}
+.pr-name { font-size: 13px; color: var(--text); font-weight: 400; }
+.pr-value {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--gold-light);
+  text-align: right;
+  white-space: nowrap;
+}
+.price-row.recommended .pr-value { font-size: 34px; }
+
+/* GUIDE */
+.guide-section {
+  margin: 16px 16px 0;
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.guide-header {
+  padding: 10px 16px;
+  border-bottom: 0.5px solid var(--border);
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.guide-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 16px;
+  border-bottom: 0.5px solid rgba(201,168,76,0.05);
+  gap: 12px;
+}
+.guide-row:last-child { border-bottom: none; }
+.guide-item { font-size: 11px; color: var(--text-muted); }
+.guide-val { font-size: 11px; color: var(--text); font-weight: 500; text-align: right; }
+
+/* ORNAMENT LINE */
+.ornament {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 16px 0;
+  opacity: 0.3;
+}
+.orn-line { flex: 1; height: 0.5px; background: var(--gold); }
+.orn-diamond {
+  width: 5px; height: 5px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+
+/* NOTICE */
+.notice {
+  margin: 12px 16px 0;
+  padding: 10px 14px;
+  background: rgba(201,168,76,0.04);
+  border: 0.5px solid rgba(201,168,76,0.15);
+  border-radius: 8px;
+  font-size: 10px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* FOOTER NAV (mobile) */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0; right: 0;
+  background: rgba(10,10,10,0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 0.5px solid var(--border);
+  padding: 8px 16px calc(8px + var(--safe-bottom));
+  display: flex;
+  gap: 4px;
+  z-index: 100;
+}
+
+.nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 7px 4px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+.nav-btn.active { background: rgba(201,168,76,0.1); }
+.nav-btn .nav-icon { font-size: 16px; line-height: 1; }
+.nav-btn .nav-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  transition: color 0.15s;
+}
+.nav-btn.active .nav-label { color: var(--gold); }
+
+/* SCROLL OFFSET FOR STICKY HEADER */
+.scroll-offset { height: 8px; }
+
+/* SEPARATOR */
+.sep {
+  height: 0.5px;
+  background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
+  margin: 16px 16px 0;
+  opacity: 0.5;
+}
+
+/* RANGE SLIDER */
+.slider-row {
+  padding: 10px 16px 14px;
+  border-bottom: 0.5px solid rgba(201,168,76,0.07);
+}
+.slider-row:last-child { border-bottom: none; }
+.slider-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+.slider-name { font-size: 12px; color: var(--text); }
+.slider-val {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--gold-light);
+}
+input[type=range] {
+  width: 100%;
+  -webkit-appearance: none;
+  height: 2px;
+  background: var(--bg3);
+  border-radius: 2px;
+  outline: none;
+  accent-color: var(--gold);
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--gold);
+  cursor: pointer;
+  border: 2px solid var(--bg);
+}
+input[type=range]::-webkit-slider-runnable-track {
+  height: 2px;
+  border-radius: 2px;
+}
+
+@media (min-width: 600px) {
+  body { max-width: 480px; margin: 0 auto; padding-bottom: 80px; }
+  .bottom-nav { max-width: 480px; left: 50%; transform: translateX(-50%); }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-brand">
+    <div class="brand-name">EfectoMidas</div>
+    <div class="brand-sub">Calculadora enchapado 24K</div>
+  </div>
+  <div class="mode-toggle">
+    <button class="mode-btn active" id="btnInterno" onclick="setMode('interno')">Interno</button>
+    <button class="mode-btn" id="btnCliente" onclick="setMode('cliente')">Cliente</button>
+  </div>
+</div>
+
+<!-- ===== MODO INTERNO ===== -->
+<div id="panelInterno" class="panel active">
+  <div class="scroll-offset"></div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-dot"></div><span class="section-label">Pieza</span></div>
+
+    <div class="field">
+      <div class="field-left">
+        <div class="field-name">Método</div>
+      </div>
+      <div class="field-right">
+        <select id="metodo" onchange="calcular()">
+          <option value="brush">Brush / pincel</option>
+          <option value="pen">Pen / pluma</option>
+          <option value="tank">Tank / baño</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-left">
+        <div class="field-name">Superficie</div>
+        <div class="field-hint">Ver guía de medición abajo</div>
+      </div>
+      <div class="field-right">
+        <input type="number" id="superficie" value="10" min="0.5" step="0.5" oninput="calcular()">
+        <span class="unit">cm²</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-left">
+        <div class="field-name">Espesor</div>
+        <div class="field-hint">1µ estándar · 2µ premium · 3µ vermeil</div>
+      </div>
+      <div class="field-right">
+        <input type="number" id="espesor" value="1" min="0.5" max="5" step="0.5" oninput="calcular()">
+        <span class="unit">µ</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-left">
+        <div class="field-name">Horas de trabajo</div>
+        <div class="field-hint">Prep + enchapado + acabado</div>
+      </div>
+      <div class="field-right">
+        <input type="number" id="horas" value="1" min="0.25" max="12" step="0.25" oninput="calcular()">
+        <span class="unit">h</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-dot"></div><span class="section-label">Parámetros de costo</span></div>
+
+    <div class="field">
+      <div class="field-left">
+        <div class="field-name">Tarifa hora</div>
+        <div class="field-hint">Artesano especializado Cba.</div>
+      </div>
+      <div class="field-right">
+        <input type="number" id="tarifa_mano" value="50" min="10" step="5" oninput="calcular()">
+        <span class="unit">Bs/h</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-left">
+        <div class="field-name">Solución (precio/ml)</div>
+        <div class="field-hint">Incluir flete + importación</div>
+      </div>
+      <div class="field-right">
+        <input type="number" id="precio_sol" value="4.5" min="1" step="0.1" oninput="calcular()">
+        <span class="unit">Bs/ml</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-left">
+        <div class="field-name">Oro spot</div>
+        <div class="field-hint">Mercado actual Bolivia</div>
+      </div>
+      <div class="field-right">
+        <input type="number" id="precio_oro" value="1144" min="500" step="10" oninput="calcular()">
+        <span class="unit">Bs/g</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="results-grid">
+    <div class="result-card">
+      <div class="rc-label">Oro consumido</div>
+      <div class="rc-value" id="r-oro-mg">—</div>
+      <div class="rc-sub">miligramos</div>
+    </div>
+    <div class="result-card">
+      <div class="rc-label">Solución usada</div>
+      <div class="rc-value" id="r-sol-ml">—</div>
+      <div class="rc-sub">mililitros</div>
+    </div>
+    <div class="result-card span2 main-result">
+      <div class="rc-label">Costo total del trabajo</div>
+      <div class="rc-value big" id="r-costo-total">—</div>
+      <div class="rc-sub">Este es tu piso. No cotizar por debajo.</div>
+    </div>
+  </div>
+
+  <div class="breakdown">
+    <div class="brow"><span class="brow-name">Solución de enchapado</span><span class="brow-val" id="b-sol">—</span></div>
+    <div class="brow"><span class="brow-name">Oro puro consumido</span><span class="brow-val" id="b-oro">—</span></div>
+    <div class="brow"><span class="brow-name">Mano de obra</span><span class="brow-val" id="b-mano">—</span></div>
+    <div class="brow"><span class="brow-name">Insumos adicionales (15%)</span><span class="brow-val" id="b-insu">—</span></div>
+    <div class="brow total-row"><span class="brow-name">Costo total</span><span class="brow-val" id="b-total">—</span></div>
+  </div>
+
+  <div class="ornament">
+    <div class="orn-line"></div><div class="orn-diamond"></div><div class="orn-line"></div>
+  </div>
+
+  <div class="guide-section">
+    <div class="guide-header"><div class="section-dot"></div>Superficies de referencia (cm²)</div>
+    <div class="guide-row"><span class="guide-item">Anillo fino</span><span class="guide-val">4–8 cm²</span></div>
+    <div class="guide-row"><span class="guide-item">Anillo ancho</span><span class="guide-val">8–15 cm²</span></div>
+    <div class="guide-row"><span class="guide-item">Pendientes (par)</span><span class="guide-val">3–10 cm²</span></div>
+    <div class="guide-row"><span class="guide-item">Cadena 45cm / 3mm</span><span class="guide-val">25–40 cm²</span></div>
+    <div class="guide-row"><span class="guide-item">Pulsera estándar</span><span class="guide-val">15–30 cm²</span></div>
+    <div class="guide-row"><span class="guide-item">Medalla / moneda</span><span class="guide-val">5–12 cm²</span></div>
+    <div class="guide-row"><span class="guide-item">Reloj (cara + bisel)</span><span class="guide-val">50–120 cm²</span></div>
+  </div>
+
+  <div class="notice">
+    Medir piezas irregulares: envolver en papel aluminio y medir el papel. Alternativa: peso en gramos × 0.5 ≈ cm² para joyería estándar.
+  </div>
+
+  <div style="height:20px"></div>
+</div>
+
+<!-- ===== MODO CLIENTE ===== -->
+<div id="panelCliente" class="panel">
+  <div class="scroll-offset"></div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-dot"></div><span class="section-label">Cotización</span></div>
+
+    <div class="field">
+      <div class="field-left">
+        <div class="field-name">Tipo de pieza</div>
+      </div>
+      <div class="field-right">
+        <select id="c-tipo" onchange="calcCliente()">
+          <option value="anillo_fino">Anillo fino</option>
+          <option value="anillo_ancho">Anillo ancho</option>
+          <option value="pendientes">Pendientes (par)</option>
+          <option value="cadena">Cadena</option>
+          <option value="pulsera">Pulsera</option>
+          <option value="medalla">Medalla / moneda</option>
+          <option value="reloj">Reloj</option>
+          <option value="objeto">Objeto decorativo</option>
+          <option value="personalizado">Personalizado</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="custom-area-row" class="field" style="display:none">
+      <div class="field-left">
+        <div class="field-name">Superficie estimada</div>
+      </div>
+      <div class="field-right">
+        <input type="number" id="c-superficie" value="10" min="1" step="1" oninput="calcCliente()">
+        <span class="unit">cm²</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-left">
+        <div class="field-name">Calidad del enchapado</div>
+      </div>
+      <div class="field-right">
+        <select id="c-calidad" onchange="calcCliente()">
+          <option value="estandar">Estándar — 1µ</option>
+          <option value="premium" selected>Premium — 2µ</option>
+          <option value="vermeil">Vermeil — 3µ</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-left">
+        <div class="field-name">Complejidad</div>
+        <div class="field-hint">Grabados, curvas, partes difíciles</div>
+      </div>
+      <div class="field-right">
+        <select id="c-complejidad" onchange="calcCliente()">
+          <option value="1.0">Normal</option>
+          <option value="1.35">Moderada</option>
+          <option value="1.7">Alta</option>
+          <option value="2.2">Muy alta</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-dot"></div><span class="section-label">Margen</span></div>
+    <div class="slider-row">
+      <div class="slider-top">
+        <span class="slider-name">Margen de ganancia</span>
+        <span class="slider-val" id="sl-margen-val">200%</span>
+      </div>
+      <input type="range" id="sl-margen" min="80" max="400" value="200" step="10" oninput="updateSlider('margen');calcCliente()">
+    </div>
+  </div>
+
+  <div class="price-band">
+    <div class="price-row">
+      <div>
+        <div class="pr-tag">mínimo</div>
+        <div class="pr-name">Precio base</div>
+        <div class="pr-label">No bajar de aquí</div>
+      </div>
+      <div class="pr-value" id="p-min">—</div>
+    </div>
+    <div class="price-row recommended">
+      <div>
+        <div class="pr-tag">recomendado</div>
+        <div class="pr-name">Precio de cotización</div>
+        <div class="pr-label">Para presentar al cliente</div>
+      </div>
+      <div class="pr-value" id="p-sug">—</div>
+    </div>
+    <div class="price-row">
+      <div>
+        <div class="pr-tag">premium</div>
+        <div class="pr-name">Precio de lujo</div>
+        <div class="pr-label">Clientes de alto valor</div>
+      </div>
+      <div class="pr-value" id="p-prem">—</div>
+    </div>
+  </div>
+
+  <div class="guide-section" style="margin-top:16px">
+    <div class="guide-header"><div class="section-dot"></div>Qué incluye el servicio</div>
+    <div class="guide-row"><span class="guide-item">Limpieza y preparación</span><span class="guide-val">incluido</span></div>
+    <div class="guide-row"><span class="guide-item">Enchapado 24K electrolítico</span><span class="guide-val">incluido</span></div>
+    <div class="guide-row"><span class="guide-item">Control de espesor</span><span class="guide-val">incluido</span></div>
+    <div class="guide-row"><span class="guide-item">Acabado y pulido</span><span class="guide-val">incluido</span></div>
+    <div class="guide-row"><span class="guide-item">Garantía de resultado</span><span class="guide-val">incluido</span></div>
+  </div>
+
+  <div class="notice">
+    Precios referenciales. La cotización final depende de inspección física de la pieza. Las piezas deben llegar en condición original — no se realizan restauraciones previas.
+  </div>
+
+  <div style="height:20px"></div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="nav-btn active" id="nav-costo" onclick="showNav('costo')">
+    <span class="nav-icon">⚗</span>
+    <span class="nav-label">Costo</span>
+  </button>
+  <button class="nav-btn" id="nav-precio" onclick="showNav('precio')">
+    <span class="nav-icon">◈</span>
+    <span class="nav-label">Precio</span>
+  </button>
+</div>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let currentMode = 'interno';
+let currentNav = 'costo';
+
+// ─── PIECE PRESETS ───────────────────────────────────────────────────────────
+const piecePresets = {
+  anillo_fino:   { area: 6,   horas: 0.75 },
+  anillo_ancho:  { area: 12,  horas: 1.0  },
+  pendientes:    { area: 7,   horas: 0.75 },
+  cadena:        { area: 32,  horas: 1.5  },
+  pulsera:       { area: 22,  horas: 1.25 },
+  medalla:       { area: 9,   horas: 0.75 },
+  reloj:         { area: 80,  horas: 2.5  },
+  objeto:        { area: 60,  horas: 2.0  },
+  personalizado: { area: null, horas: 1.5 }
+};
+
+const calidadEspesor = { estandar: 1, premium: 2, vermeil: 3 };
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+const fmt = v => 'Bs ' + Math.round(v).toLocaleString('es-BO');
+const fmtDec = (v, d) => v.toFixed(d);
+
+function el(id) { return document.getElementById(id); }
+
+// ─── MODE / NAV ───────────────────────────────────────────────────────────────
+function setMode(mode) {
+  currentMode = mode;
+  el('btnInterno').classList.toggle('active', mode === 'interno');
+  el('btnCliente').classList.toggle('active', mode === 'cliente');
+
+  if (mode === 'interno') {
+    el('panelInterno').classList.add('active');
+    el('panelCliente').classList.remove('active');
+    showNav('costo');
+  } else {
+    el('panelCliente').classList.add('active');
+    el('panelInterno').classList.remove('active');
+    showNav('precio');
+    calcCliente();
+  }
+}
+
+function showNav(nav) {
+  currentNav = nav;
+  el('nav-costo').classList.toggle('active', nav === 'costo');
+  el('nav-precio').classList.toggle('active', nav === 'precio');
+  if (nav === 'costo') setMode('interno');
+  else setMode('cliente');
+}
+
+// ─── SLIDER UPDATE ────────────────────────────────────────────────────────────
+function updateSlider(name) {
+  const v = el('sl-' + name).value;
+  el('sl-' + name + '-val').textContent = v + '%';
+}
+
+// ─── CALCULAR COSTO INTERNO ───────────────────────────────────────────────────
+function calcular() {
+  const sup      = parseFloat(el('superficie').value) || 10;
+  const esp      = parseFloat(el('espesor').value)    || 1;
+  const horas    = parseFloat(el('horas').value)      || 1;
+  const tarifa   = parseFloat(el('tarifa_mano').value)|| 50;
+  const precSol  = parseFloat(el('precio_sol').value) || 4.5;
+  const precOro  = parseFloat(el('precio_oro').value) || 1144;
+  const metodo   = el('metodo').value;
+
+  // Gold density 19.32 g/cm³ = 0.0193 g/mm³; volume = cm² × µm × 0.0001 cm/µm
+  const volAu_cm3 = sup * (esp * 0.0001);
+  const pesoAu_g  = volAu_cm3 * 19.32;
+  const pesoAu_mg = pesoAu_g * 1000;
+
+  // Solution concentration (g Au / L)
+  const concGL = metodo === 'pen' ? 12 : (metodo === 'tank' ? 4 : 8);
+  // Efficiency (not all solution depleted)
+  const efic = metodo === 'brush' ? 0.72 : (metodo === 'pen' ? 0.82 : 0.90);
+  const mlUsados = (pesoAu_g / (concGL / 1000)) / efic;
+
+  // Cost: solution markup 2.5× because you can't exhaust 100% of it
+  const costoSol  = mlUsados * precSol * 2.5;
+  const costoOro  = pesoAu_g * precOro;
+  const costoMano = horas * tarifa;
+  const costoInsu = (costoSol + costoOro + costoMano) * 0.15;
+  const costoTotal = costoSol + costoOro + costoMano + costoInsu;
+
+  el('r-oro-mg').textContent    = fmtDec(pesoAu_mg, 3) + ' mg';
+  el('r-sol-ml').textContent    = fmtDec(mlUsados, 2) + ' ml';
+  el('r-costo-total').textContent = fmt(costoTotal);
+  el('b-sol').textContent       = fmt(costoSol);
+  el('b-oro').textContent       = fmt(costoOro);
+  el('b-mano').textContent      = fmt(costoMano);
+  el('b-insu').textContent      = fmt(costoInsu);
+  el('b-total').textContent     = fmt(costoTotal);
+
+  // Pass to client mode
+  window._costoBase = costoTotal;
+}
+
+// ─── CALCULAR PRECIO CLIENTE ──────────────────────────────────────────────────
+function calcCliente() {
+  const tipo       = el('c-tipo').value;
+  const calidad    = el('c-calidad').value;
+  const complejidad = parseFloat(el('c-complejidad').value) || 1.0;
+  const margen     = parseFloat(el('sl-margen').value) || 200;
+
+  // Show/hide custom area
+  const isCustom = tipo === 'personalizado';
+  el('custom-area-row').style.display = isCustom ? 'flex' : 'none';
+
+  const preset = piecePresets[tipo];
+  const area   = isCustom ? (parseFloat(el('c-superficie').value) || 10) : preset.area;
+  const horas  = preset.horas;
+  const esp    = calidadEspesor[calidad];
+
+  // Internal cost calculation (use default params)
+  const concGL   = 8; // brush default
+  const efic     = 0.72;
+  const precSol  = 4.5;
+  const precOro  = 1144;
+  const tarifa   = 50;
+
+  const volAu_cm3 = area * (esp * 0.0001);
+  const pesoAu_g  = volAu_cm3 * 19.32;
+  const mlUsados  = (pesoAu_g / (concGL / 1000)) / efic;
+  const costoSol  = mlUsados * precSol * 2.5;
+  const costoOro  = pesoAu_g * precOro;
+  const costoMano = horas * tarifa;
+  const costoInsu = (costoSol + costoOro + costoMano) * 0.15;
+  const costoBase = (costoSol + costoOro + costoMano + costoInsu) * complejidad;
+
+  const precioSug  = costoBase * (1 + margen / 100);
+  const precioMin  = costoBase * 1.4;
+  const precioPrem = precioSug * 1.35;
+
+  el('p-min').textContent  = fmt(precioMin);
+  el('p-sug').textContent  = fmt(precioSug);
+  el('p-prem').textContent = fmt(precioPrem);
+}
+
+// ─── INIT ──────────────────────────────────────────────────────────────────
+calcular();
+calcCliente();
+</script>
+</body>
+</html>
