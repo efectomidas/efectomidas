@@ -43,7 +43,7 @@ body {
   font-size: 13px;
   min-height: 100dvh;
   padding-top: var(--safe-top);
-  padding-bottom: calc(var(--safe-bottom) + 60px);
+  padding-bottom: calc(var(--safe-bottom) + 20px);
   overflow-x: hidden;
 }
 
@@ -419,45 +419,7 @@ select {
   line-height: 1.6;
 }
 
-/* FOOTER NAV (mobile) */
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0; right: 0;
-  background: rgba(10,10,10,0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-top: 0.5px solid var(--border);
-  padding: 8px 16px calc(8px + var(--safe-bottom));
-  display: flex;
-  gap: 4px;
-  z-index: 100;
-}
 
-.nav-btn {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  padding: 7px 4px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  border-radius: 8px;
-  transition: background 0.15s;
-}
-.nav-btn.active { background: rgba(201,168,76,0.1); }
-.nav-btn .nav-icon { font-size: 16px; line-height: 1; }
-.nav-btn .nav-label {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  transition: color 0.15s;
-}
-.nav-btn.active .nav-label { color: var(--gold); }
 
 /* SCROLL OFFSET FOR STICKY HEADER */
 .scroll-offset { height: 8px; }
@@ -512,6 +474,42 @@ input[type=range]::-webkit-slider-runnable-track {
   border-radius: 2px;
 }
 
+.big-tabs {
+  display: flex;
+  gap: 0;
+  margin: 0;
+  border-bottom: 0.5px solid var(--border);
+  background: var(--bg2);
+  position: sticky;
+  top: 57px;
+  z-index: 99;
+}
+.big-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+.big-tab.active {
+  color: var(--gold-light);
+  border-bottom: 2px solid var(--gold);
+  background: rgba(201,168,76,0.05);
+}
+.bt-icon { font-size: 15px; line-height: 1; }
+.bt-label { font-size: 12px; font-weight: 500; }
+
 @media (min-width: 600px) {
   body { max-width: 480px; margin: 0 auto; padding-bottom: 80px; }
   .bottom-nav { max-width: 480px; left: 50%; transform: translateX(-50%); }
@@ -525,31 +523,33 @@ input[type=range]::-webkit-slider-runnable-track {
     <div class="brand-name">EfectoMidas</div>
     <div class="brand-sub">Calculadora enchapado 24K</div>
   </div>
-  <div class="mode-toggle">
-    <button class="mode-btn active" id="btnInterno" onclick="setMode('interno')">Interno</button>
-    <button class="mode-btn" id="btnCliente" onclick="setMode('cliente')">Cliente</button>
-  </div>
+  <button id="btnLock" onclick="showPinOverlay()" title="Acceso interno" style="background:none;border:none;cursor:pointer;padding:6px 8px;color:var(--gold-dim);font-size:13px;line-height:1;letter-spacing:0.15em;opacity:0.4">&#9679;&#9679;&#9679;</button>
+</div>
+
+<div class="big-tabs">
+  <button class="big-tab active" id="btnCliente" onclick="setMode('cliente')">
+    <span class="bt-icon">◈</span>
+    <span class="bt-label">Precio</span>
+  </button>
+  <button class="big-tab" id="btnInterno" onclick="showPinOverlay()">
+    <span class="bt-icon">⚗</span>
+    <span class="bt-label">Admin</span>
+  </button>
 </div>
 
 <!-- ===== MODO INTERNO ===== -->
 <div id="panelInterno" class="panel active">
   <div class="scroll-offset"></div>
 
+  <div id="interno-locked" style="margin:16px;padding:32px 20px;background:var(--bg2);border:0.5px solid var(--border);border-radius:12px;text-align:center">
+    <div style="font-size:28px;margin-bottom:12px;color:var(--gold-dim)">&#9679;&#9679;&#9679;</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--text-muted);letter-spacing:0.08em">Acceso interno</div>
+    <div style="font-size:11px;color:var(--text-dim);margin-top:8px;letter-spacing:0.15em">Ingresá el PIN para continuar</div>
+  </div>
+
+  <div id="interno-content" style="display:none">
   <div class="section">
     <div class="section-header"><div class="section-dot"></div><span class="section-label">Pieza</span></div>
-
-    <div class="field">
-      <div class="field-left">
-        <div class="field-name">Método</div>
-      </div>
-      <div class="field-right">
-        <select id="metodo" onchange="calcular()">
-          <option value="brush">Brush / pincel</option>
-          <option value="pen">Pen / pluma</option>
-          <option value="tank">Tank / baño</option>
-        </select>
-      </div>
-    </div>
 
     <div class="field">
       <div class="field-left">
@@ -668,6 +668,7 @@ input[type=range]::-webkit-slider-runnable-track {
   </div>
 
   <div style="height:20px"></div>
+  </div><!-- end interno-content -->
 </div>
 
 <!-- ===== MODO CLIENTE ===== -->
@@ -735,41 +736,42 @@ input[type=range]::-webkit-slider-runnable-track {
     </div>
   </div>
 
-  <div class="section">
-    <div class="section-header"><div class="section-dot"></div><span class="section-label">Margen</span></div>
-    <div class="slider-row">
-      <div class="slider-top">
-        <span class="slider-name">Margen de ganancia</span>
-        <span class="slider-val" id="sl-margen-val">200%</span>
-      </div>
-      <input type="range" id="sl-margen" min="80" max="400" value="200" step="10" oninput="updateSlider('margen');calcCliente()">
-    </div>
-  </div>
-
   <div class="price-band">
-    <div class="price-row">
-      <div>
-        <div class="pr-tag">mínimo</div>
-        <div class="pr-name">Precio base</div>
-        <div class="pr-label">No bajar de aquí</div>
-      </div>
-      <div class="pr-value" id="p-min">—</div>
-    </div>
     <div class="price-row recommended">
       <div>
-        <div class="pr-tag">recomendado</div>
-        <div class="pr-name">Precio de cotización</div>
-        <div class="pr-label">Para presentar al cliente</div>
+        <div class="pr-tag">precio del servicio</div>
+        <div class="pr-name">Enchapado 24K</div>
+        <div class="pr-label">Referencial · sujeto a inspección</div>
       </div>
       <div class="pr-value" id="p-sug">—</div>
     </div>
-    <div class="price-row">
+    <div class="price-row" id="desc-row" style="display:none">
       <div>
-        <div class="pr-tag">premium</div>
-        <div class="pr-name">Precio de lujo</div>
-        <div class="pr-label">Clientes de alto valor</div>
+        <div class="pr-tag" id="desc-tag" style="border-color:#8B6E2E;color:#8B6E2E">—</div>
+        <div class="pr-name" style="color:var(--text-muted)">Descuento</div>
+        <div class="pr-label" id="desc-pct">—</div>
       </div>
-      <div class="pr-value" id="p-prem">—</div>
+      <div class="pr-value" id="p-desc" style="color:#C0392B;font-size:22px">—</div>
+    </div>
+    <div class="price-row" id="total-row" style="display:none;background:linear-gradient(135deg,#111 0%,#0e0d08 100%);border-left:2px solid var(--gold)">
+      <div>
+        <div class="pr-tag">total a pagar</div>
+        <div class="pr-name">Con descuento aplicado</div>
+      </div>
+      <div class="pr-value" id="p-total" style="font-size:34px">—</div>
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:16px">
+    <div class="section-header"><div class="section-dot"></div><span class="section-label">Categoría de descuento</span></div>
+    <div class="field">
+      <div class="field-left">
+        <div class="field-name">Código de descuento</div>
+        <div class="field-hint">Ingresá el código si tenés uno</div>
+      </div>
+      <div class="field-right">
+        <input type="text" id="c-cupon" placeholder="———" oninput="calcCliente()" style="background:var(--bg3);border:0.5px solid var(--border-strong);border-radius:6px;color:var(--gold-light);font-family:var(--font-mono);font-size:13px;padding:7px 10px;width:110px;outline:none;text-transform:uppercase;letter-spacing:0.1em">
+      </div>
     </div>
   </div>
 
@@ -789,17 +791,7 @@ input[type=range]::-webkit-slider-runnable-track {
   <div style="height:20px"></div>
 </div>
 
-<!-- BOTTOM NAV -->
-<div class="bottom-nav">
-  <button class="nav-btn active" id="nav-costo" onclick="showNav('costo')">
-    <span class="nav-icon">⚗</span>
-    <span class="nav-label">Costo</span>
-  </button>
-  <button class="nav-btn" id="nav-precio" onclick="showNav('precio')">
-    <span class="nav-icon">◈</span>
-    <span class="nav-label">Precio</span>
-  </button>
-</div>
+
 
 <script>
 // ─── STATE ───────────────────────────────────────────────────────────────────
@@ -830,28 +822,23 @@ function el(id) { return document.getElementById(id); }
 // ─── MODE / NAV ───────────────────────────────────────────────────────────────
 function setMode(mode) {
   currentMode = mode;
-  el('btnInterno').classList.toggle('active', mode === 'interno');
-  el('btnCliente').classList.toggle('active', mode === 'cliente');
-
+  document.querySelectorAll('.big-tab').forEach(t => t.classList.remove('active'));
   if (mode === 'interno') {
+    if (el('btnInterno')) el('btnInterno').classList.add('active');
     el('panelInterno').classList.add('active');
     el('panelCliente').classList.remove('active');
-    showNav('costo');
   } else {
+    if (el('btnCliente')) el('btnCliente').classList.add('active');
     el('panelCliente').classList.add('active');
     el('panelInterno').classList.remove('active');
-    showNav('precio');
+    // Re-lock interno when leaving
+    if (el('interno-locked'))  el('interno-locked').style.display  = 'block';
+    if (el('interno-content')) el('interno-content').style.display = 'none';
     calcCliente();
   }
 }
 
-function showNav(nav) {
-  currentNav = nav;
-  el('nav-costo').classList.toggle('active', nav === 'costo');
-  el('nav-precio').classList.toggle('active', nav === 'precio');
-  if (nav === 'costo') setMode('interno');
-  else setMode('cliente');
-}
+
 
 // ─── SLIDER UPDATE ────────────────────────────────────────────────────────────
 function updateSlider(name) {
@@ -867,17 +854,15 @@ function calcular() {
   const tarifa   = parseFloat(el('tarifa_mano').value)|| 50;
   const precSol  = parseFloat(el('precio_sol').value) || 4.5;
   const precOro  = parseFloat(el('precio_oro').value) || 1144;
-  const metodo   = el('metodo').value;
 
-  // Gold density 19.32 g/cm³ = 0.0193 g/mm³; volume = cm² × µm × 0.0001 cm/µm
+  // Gold density 19.32 g/cm³; volume = cm² × µm × 0.0001 cm/µm
   const volAu_cm3 = sup * (esp * 0.0001);
   const pesoAu_g  = volAu_cm3 * 19.32;
   const pesoAu_mg = pesoAu_g * 1000;
 
-  // Solution concentration (g Au / L)
-  const concGL = metodo === 'pen' ? 12 : (metodo === 'tank' ? 4 : 8);
-  // Efficiency (not all solution depleted)
-  const efic = metodo === 'brush' ? 0.72 : (metodo === 'pen' ? 0.82 : 0.90);
+  // Brush plating: 8 g/L concentration, 72% efficiency
+  const concGL = 8;
+  const efic   = 0.72;
   const mlUsados = (pesoAu_g / (concGL / 1000)) / efic;
 
   // Cost: solution markup 2.5× because you can't exhaust 100% of it
@@ -900,28 +885,43 @@ function calcular() {
   window._costoBase = costoTotal;
 }
 
+// ─── DISCOUNT CONFIG ─────────────────────────────────────────────────────────
+const descuentos = {
+  '0':          { pct: 0,  label: '' },
+  'lanzamiento':{ pct: 20, label: 'Lanzamiento' },
+  'oferta':     { pct: 15, label: 'Oferta limitada' },
+  'vip':        { pct: 25, label: 'Cliente VIP' },
+  'recurrente': { pct: 10, label: 'Cliente recurrente' },
+  'referido':   { pct: 12, label: 'Referido' },
+  'cupon':      { pct: 0,  label: 'Cupón' }
+};
+
+const cuponesValidos = { 'MIDAS10': 10, 'GOLD15': 15, 'VIP20': 20, 'PROMO24K': 18 };
+
 // ─── CALCULAR PRECIO CLIENTE ──────────────────────────────────────────────────
 function calcCliente() {
-  const tipo       = el('c-tipo').value;
-  const calidad    = el('c-calidad').value;
+  const tipo        = el('c-tipo').value;
+  const calidad     = el('c-calidad').value;
   const complejidad = parseFloat(el('c-complejidad').value) || 1.0;
-  const margen     = parseFloat(el('sl-margen').value) || 200;
+  const margen      = 200;
+  const descTipo    = 'cupon';
 
   // Show/hide custom area
   const isCustom = tipo === 'personalizado';
   el('custom-area-row').style.display = isCustom ? 'flex' : 'none';
+
+  // cupon only mode — no selector
 
   const preset = piecePresets[tipo];
   const area   = isCustom ? (parseFloat(el('c-superficie').value) || 10) : preset.area;
   const horas  = preset.horas;
   const esp    = calidadEspesor[calidad];
 
-  // Internal cost calculation (use default params)
-  const concGL   = 8; // brush default
-  const efic     = 0.72;
-  const precSol  = 4.5;
-  const precOro  = 1144;
-  const tarifa   = 50;
+  const concGL  = 8;
+  const efic    = 0.72;
+  const precSol = 4.5;
+  const precOro = 1144;
+  const tarifa  = 50;
 
   const volAu_cm3 = area * (esp * 0.0001);
   const pesoAu_g  = volAu_cm3 * 19.32;
@@ -931,19 +931,129 @@ function calcCliente() {
   const costoMano = horas * tarifa;
   const costoInsu = (costoSol + costoOro + costoMano) * 0.15;
   const costoBase = (costoSol + costoOro + costoMano + costoInsu) * complejidad;
+  const precioSug = costoBase * (1 + margen / 100);
 
-  const precioSug  = costoBase * (1 + margen / 100);
-  const precioMin  = costoBase * 1.4;
-  const precioPrem = precioSug * 1.35;
+  const codigo  = el('c-cupon') ? el('c-cupon').value.trim().toUpperCase() : '';
+  const pct     = cuponesValidos[codigo] || 0;
+  const hasDisc = pct > 0 && codigo.length > 0;
 
-  el('p-min').textContent  = fmt(precioMin);
-  el('p-sug').textContent  = fmt(precioSug);
-  el('p-prem').textContent = fmt(precioPrem);
+
+
+  el('p-sug').textContent = fmt(precioSug);
+
+  const montoDesc = precioSug * (pct / 100);
+  const total     = precioSug - montoDesc;
+
+  el('desc-row').style.display  = 'none';
+  el('total-row').style.display = 'none';
+
+  if (hasDisc) {
+    el('desc-tag').textContent = 'Descuento aplicado';
+    el('desc-pct').textContent = pct + '% de descuento';
+    el('p-desc').textContent   = '− Bs ' + Math.round(montoDesc).toLocaleString('es-BO');
+    el('p-total').textContent  = fmt(total);
+    el('desc-row').style.display  = 'flex';
+    el('total-row').style.display = 'flex';
+  }
 }
 
 // ─── INIT ──────────────────────────────────────────────────────────────────
+// Start in client mode — interno requires PIN
+setMode('cliente');
 calcular();
 calcCliente();
 </script>
+
+<!-- PIN OVERLAY -->
+<div id="pin-overlay" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(10,10,10,0.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);flex-direction:column;align-items:center;justify-content:center;gap:24px">
+  <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:#E8C97A;letter-spacing:0.1em">Acceso interno</div>
+  <div style="font-size:11px;letter-spacing:0.25em;text-transform:uppercase;color:#4A4640">CCJES</div>
+  <div style="display:flex;gap:10px;margin-top:8px" id="pin-dots">
+    <div class="pdot" id="pd0"></div>
+    <div class="pdot" id="pd1"></div>
+    <div class="pdot" id="pd2"></div>
+    <div class="pdot" id="pd3"></div>
+    <div class="pdot" id="pd4"></div>
+    <div class="pdot" id="pd5"></div>
+  </div>
+  <div id="pin-error" style="font-size:11px;color:#C0392B;letter-spacing:0.15em;height:16px;text-align:center"></div>
+  <div style="display:grid;grid-template-columns:repeat(3,64px);gap:10px">
+    <button class="pkey" onclick="pinKey('1')">1</button>
+    <button class="pkey" onclick="pinKey('2')">2</button>
+    <button class="pkey" onclick="pinKey('3')">3</button>
+    <button class="pkey" onclick="pinKey('4')">4</button>
+    <button class="pkey" onclick="pinKey('5')">5</button>
+    <button class="pkey" onclick="pinKey('6')">6</button>
+    <button class="pkey" onclick="pinKey('7')">7</button>
+    <button class="pkey" onclick="pinKey('8')">8</button>
+    <button class="pkey" onclick="pinKey('9')">9</button>
+    <button class="pkey" onclick="pinClear()" style="font-size:12px;color:#7A756A">borrar</button>
+    <button class="pkey" onclick="pinKey('0')">0</button>
+    <button class="pkey" onclick="pinClose()" style="font-size:18px;color:#7A756A">✕</button>
+  </div>
+</div>
+
+<style>
+.pdot{width:12px;height:12px;border-radius:50%;border:1px solid #4A4640;background:none;transition:background 0.15s}
+.pdot.filled{background:#C9A84C;border-color:#C9A84C}
+.pkey{width:64px;height:64px;border-radius:50%;background:#181818;border:0.5px solid rgba(201,168,76,0.2);color:#F0EDE6;font-family:'DM Mono',monospace;font-size:20px;font-weight:400;cursor:pointer;transition:background 0.15s}
+.pkey:active{background:#C9A84C;color:#000}
+</style>
+
+<script>
+const PIN_CORRECT = '156200';
+let pinEntry = '';
+
+function showPinOverlay() {
+  pinEntry = '';
+  updateDots();
+  el('pin-error').textContent = '';
+  el('pin-overlay').style.display = 'flex';
+}
+
+function pinClose() {
+  el('pin-overlay').style.display = 'none';
+  pinEntry = '';
+  updateDots();
+}
+
+function pinKey(d) {
+  if (pinEntry.length >= 6) return;
+  pinEntry += d;
+  updateDots();
+  if (pinEntry.length === 6) {
+    setTimeout(checkPin, 120);
+  }
+}
+
+function pinClear() {
+  pinEntry = pinEntry.slice(0, -1);
+  updateDots();
+  el('pin-error').textContent = '';
+}
+
+function updateDots() {
+  for (let i = 0; i < 6; i++) {
+    el('pd' + i).classList.toggle('filled', i < pinEntry.length);
+  }
+}
+
+function checkPin() {
+  if (pinEntry === PIN_CORRECT) {
+    el('pin-overlay').style.display = 'none';
+    setMode('interno');
+    // Reveal interno content
+    if (el('interno-locked'))  el('interno-locked').style.display  = 'none';
+    if (el('interno-content')) el('interno-content').style.display = 'block';
+    calcular();
+  } else {
+    el('pin-error').textContent = 'PIN incorrecto';
+    pinEntry = '';
+    updateDots();
+    setTimeout(() => { el('pin-error').textContent = ''; }, 1800);
+  }
+}
+</script>
+
 </body>
 </html>
